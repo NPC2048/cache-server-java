@@ -1,0 +1,30 @@
+2020-06-12 17:12:22.308  INFO 20344 --- [main] c.l.cacheserver.CacheServerApplication   : Starting CacheServerApplication on EASYTONEPC133 with PID 20344 (D:\data\github\hash-cache-server\cache-server\target\classes started by yuelong.liang in D:\data\github\hash-cache-server)
+2020-06-12 17:12:22.312  INFO 20344 --- [main] c.l.cacheserver.CacheServerApplication   : No active profile set, falling back to default profiles: default
+2020-06-12 17:12:24.213  INFO 20344 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-06-12 17:12:24.215  INFO 20344 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-06-12 17:12:24.247  INFO 20344 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15ms. Found 0 Redis repository interfaces.
+2020-06-12 17:12:25.890  INFO 20344 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2020-06-12 17:12:25.908  INFO 20344 --- [main] c.l.cacheserver.CacheServerApplication   : Started CacheServerApplication in 4.487 seconds (JVM running for 6.915)
+2020-06-12 17:12:36.351  INFO 20344 --- [reactor-http-nio-2] c.l.c.controller.MainController          : 缓存命中: d3d9446802a44259755d38e6d163e820
+2020-06-12 17:15:06.846  INFO 26368 --- [main] c.l.cacheserver.CacheServerApplication   : Starting CacheServerApplication on EASYTONEPC133 with PID 26368 (D:\data\github\hash-cache-server\cache-server\target\classes started by yuelong.liang in D:\data\github\hash-cache-server)
+2020-06-12 17:15:06.856  INFO 26368 --- [main] c.l.cacheserver.CacheServerApplication   : No active profile set, falling back to default profiles: default
+2020-06-12 17:15:08.248  INFO 26368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-06-12 17:15:08.253  INFO 26368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-06-12 17:15:08.291  INFO 26368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17ms. Found 0 Redis repository interfaces.
+2020-06-12 17:15:09.683  INFO 26368 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2020-06-12 17:15:09.698  INFO 26368 --- [main] c.l.cacheserver.CacheServerApplication   : Started CacheServerApplication in 3.887 seconds (JVM running for 5.303)
+2020-06-12 17:17:53.718  INFO 23164 --- [main] c.l.cacheserver.CacheServerApplication   : Starting CacheServerApplication on EASYTONEPC133 with PID 23164 (D:\data\github\hash-cache-server\cache-server\target\classes started by yuelong.liang in D:\data\github\hash-cache-server)
+2020-06-12 17:17:53.722  INFO 23164 --- [main] c.l.cacheserver.CacheServerApplication   : No active profile set, falling back to default profiles: default
+2020-06-12 17:17:54.906  INFO 23164 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-06-12 17:17:54.908  INFO 23164 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-06-12 17:17:54.944  INFO 23164 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17ms. Found 0 Redis repository interfaces.
+2020-06-12 17:17:56.256  INFO 23164 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2020-06-12 17:17:56.269  INFO 23164 --- [main] c.l.cacheserver.CacheServerApplication   : Started CacheServerApplication in 3.476 seconds (JVM running for 4.818)
+2020-06-12 17:18:29.515  INFO 12424 --- [main] c.l.cacheserver.CacheServerApplication   : Starting CacheServerApplication on EASYTONEPC133 with PID 12424 (D:\data\github\hash-cache-server\cache-server\target\classes started by yuelong.liang in D:\data\github\hash-cache-server)
+2020-06-12 17:18:29.520  INFO 12424 --- [main] c.l.cacheserver.CacheServerApplication   : No active profile set, falling back to default profiles: default
+2020-06-12 17:18:31.381  INFO 12424 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-06-12 17:18:31.385  INFO 12424 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-06-12 17:18:31.426  INFO 12424 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22ms. Found 0 Redis repository interfaces.
+2020-06-12 17:18:32.929  INFO 12424 --- [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2020-06-12 17:18:32.946  INFO 12424 --- [main] c.l.cacheserver.CacheServerApplication   : Started CacheServerApplication in 4.369 seconds (JVM running for 6.4)
+2020-06-12 17:18:35.375  INFO 12424 --- [reactor-http-nio-2] c.l.c.controller.MainController          : 缓存命中: hash::c4ca4238a0b923820dcc509a6f75849b

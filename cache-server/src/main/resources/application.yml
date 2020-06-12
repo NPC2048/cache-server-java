@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: cache-server
+  redis:
+    host: 47.107.78.83
+    port: 6667
+    lettuce:
+      pool:
+        max-active: 16
+        min-idle: 0
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  file:
+    clean-history-on-start: true
+    name: spring.log
+# 自定义配置
+cache-server:
+  hash-server-host: http://47.107.78.83:8051/calc

@@ -1,0 +1,16 @@
+version: "2"
+services:
+  cache-server:
+    image: java:8
+    container_name: java-cache-server1
+    restart: always
+    working_dir: /root
+    network_mode: bridge
+    ports:
+      - 6671:8080
+    volumes:
+      - ./cache-server-1.0.0.jar:/root/app.jar
+      - ./spring.log:/root/spring.log
+    privileged: true
+    command: java -jar /root/app.jar -Xms256m -Xmx256m
+    mem_limit: 256M
