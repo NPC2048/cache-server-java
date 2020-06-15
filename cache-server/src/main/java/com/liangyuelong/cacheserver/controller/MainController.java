@@ -1,14 +1,15 @@
 package com.liangyuelong.cacheserver.controller;
 
-import com.liangyuelong.cacheserver.constants.CacheConstant;
+import com.liangyuelong.cacheserver.hash.HashServerUtils;
+import com.whalin.MemCached.MemCachedClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -21,36 +22,39 @@ import java.nio.charset.StandardCharsets;
  */
 @RestController
 @Slf4j
-@CacheConfig(cacheNames = "hash-cache")
 public class MainController {
 
     @Resource
-    private RestTemplate restTemplate;
-
-    @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private MemCachedClient client;
 
     @Value("${cache-server.hash-server-host}")
     private String hashServerHost;
 
-    @RequestMapping("/calc")
-    public Mono<String> calc(String input) {
-        // 判断缓存中是否存在
+    @RequestMapping("/{path}")
+    public Mono<?> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
+        log.info("target path: " + path);
+        log.info("body: " + body);
+        log.info("input: " + input);
+        log.info(request.toString());
         // 对 input 进行 md5 取值
-        String md5 = DigestUtils.md5DigestAsHex(input.getBytes(StandardCharsets.UTF_8));
-        String key = CacheConstant.HASH_PREFIX + md5;
+        String key = DigestUtils.md5DigestAsHex(input.getBytes(StandardCharsets.UTF_8));
         // 从 redis 获取
-        String hash = redisTemplate.opsForValue().get(key);
+        String hash = (String) client.get(key);
+//        String hash = redisTemplate.opsForValue().get(key);
         // hash 不为空，直接返回
         if (hash != null) {
 //            log.info("缓存命中: " + key);
             return Mono.just(hash);
         }
+        // 加入订阅者队列
+
         // 从 hash server 获取值
-        hash = restTemplate.getForObject(hashServerHost, String.class, "input", input);
+        do {
+            hash = HashServerUtils.request(request, path, body);
+            // 判断是否正确
+        } while (!HashServerUtils.isSuccess(hash));
         // 缓存至 redis
-        redisTemplate.opsForValue().set(key, hash);
+        client.set(key, hash);
         return Mono.just(hash);
     }
-
 }

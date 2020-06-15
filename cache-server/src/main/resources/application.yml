@@ -3,19 +3,23 @@ server:
 spring:
   application:
     name: cache-server
-  redis:
-    host: 47.107.78.83
-    port: 6667
-    lettuce:
-      pool:
-        max-active: 16
-        min-idle: 0
   main:
     allow-bean-definition-overriding: true
+memcached:
+  servers: 47.107.78.83:11211
+  failover: true
+  initConn: 100
+  minConn: 20
+  maxConn: 1000
+  maintSleep: 50
+  nagel: false
+  socketTO: 3000
+  aliveCheck: true
 logging:
   file:
     clean-history-on-start: true
     name: spring.log
 # 自定义配置
 cache-server:
-  hash-server-host: http://47.107.78.83:8051/calc
+#  hash-server-host: http://47.107.78.83:8051/calc
+  hash-server-host: http://localhost:8672/
