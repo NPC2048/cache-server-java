@@ -1,10 +1,9 @@
-package com.liangyuelong.cacheserver.test;
+package com.liangyuelong.cacheserver.handler;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
 /**
  * calc 方法判断 memcached 中是否已有正在处理中的观察者
@@ -14,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class HashObserver implements Observer<String> {
 
-
+    private String result = "init";
 
     public HashObserver(Observable<String> observable) {
         observable.subscribe(this);
@@ -22,12 +21,11 @@ public class HashObserver implements Observer<String> {
 
     @Override
     public void onSubscribe(Disposable d) {
-
     }
 
     @Override
     public void onNext(String s) {
-
+        this.result = s;
     }
 
     @Override
@@ -38,6 +36,10 @@ public class HashObserver implements Observer<String> {
     @Override
     public void onComplete() {
 
+    }
+
+    public Object result() {
+        return result;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.liangyuelong.cacheserver.test;
+package com.liangyuelong.cacheserver.handler;
 
 import com.liangyuelong.cacheserver.hash.HashServerUtils;
 import io.reactivex.ObservableEmitter;
@@ -27,7 +27,7 @@ public class HashObservable implements ObservableOnSubscribe<String> {
     }
 
     @Override
-    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+    public void subscribe(ObservableEmitter<String> emitter) {
         String hash;
         // 从 hash server 获取值
         do {

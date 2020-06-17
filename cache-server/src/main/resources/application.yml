@@ -19,6 +19,7 @@ logging:
   file:
     clean-history-on-start: true
     name: spring.log
+    max-history: 0
 # 自定义配置
 cache-server:
 #  hash-server-host: http://47.107.78.83:8051/calc
