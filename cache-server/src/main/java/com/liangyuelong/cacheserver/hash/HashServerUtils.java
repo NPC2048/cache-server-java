@@ -48,8 +48,10 @@ public class HashServerUtils {
         // 请求参数
         Map<String, String> params = request.getQueryParams().toSingleValueMap();
         // 请求 body
+        // 添加请求参数并 url 编码
+        String url = HttpRequest.encode(HttpRequest.append(hashServerHost + path, params));
         // 组装 http 报文
-        HttpRequest http = new HttpRequest(HttpRequest.append(hashServerHost + path, params), method).headers(headers);
+        HttpRequest http = new HttpRequest(url, method).headers(headers);
         // 设置 request body
         if (StringUtils.isNotEmpty(requestBody)) {
             http = http.send(requestBody);

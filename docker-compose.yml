@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   cache-server:
     image: java:8
@@ -10,12 +10,11 @@ services:
       - 6671:8080
     volumes:
       - ./cache-server-1.0.0.jar:/root/app.jar
-      - ./spring.log:/root/spring.log
+      - ./log:/root/
     privileged: true
-    command:
-      - java -jar
-      - -Dcache-server.hash-server-host=server地址
-      - -Dmemcached.servers=memcached地址
-      - -Dhash.pool.core-size=20
-      - /root/app.jar -Xms320m -Xmx320m
-    mem_limit: 320m
+    environment:
+      - cache-server.hash-server-host=server地址
+      - memcached.servers=memcached地址
+      - hash.pool.core-size=20
+      - mem=320m
+    command: java -jar /root/app.jar -Xms320m -Xmx320m > /root/spring.log

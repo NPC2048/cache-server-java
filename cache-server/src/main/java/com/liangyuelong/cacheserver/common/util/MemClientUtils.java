@@ -79,13 +79,13 @@ public class MemClientUtils {
         // 判断是否已有正在处理中的队列
         Queue<MonoSink<String>> queue = map.get(key);
         if (queue == null) {
-            log.info("第一个:" + input);
-            // 启用线程去获取 server 任务
+//            log.info("第一个:" + input);
             queue = new ConcurrentLinkedQueue<>();
             map.put(key, queue);
             final Queue<MonoSink<String>> finalQueue = queue;
+            // 启用线程去 server 获取 hash
             hashGetThreadPoolTaskExecutor.execute(() -> {
-                log.info("新线程: " + Thread.currentThread());
+//                log.info("新线程: " + Thread.currentThread());
                 String getHash;
                 do {
                     getHash = HashServerUtils.request(request, path, requestBody);
@@ -99,17 +99,17 @@ public class MemClientUtils {
                 // 返回
                 sink.success(getHash);
                 // 通知其他 quque
-                log.info("返回:" + finalQueue.size());
+//                log.info("返回:" + finalQueue.size());
                 for (MonoSink<String> monoSink : finalQueue) {
                     monoSink.success(getHash);
                 }
             });
         } else {
-            log.info("后续:" + input);
+//            log.info("后续:" + input);
             // 加入 queue
             queue.add(sink);
         }
-        log.info("map 数量:" + map.size());
+//        log.info("map 数量:" + map.size());
     }
 
 }
