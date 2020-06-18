@@ -1,6 +1,7 @@
 package com.liangyuelong.cacheserver.test;
 
 import com.github.kevinsawicki.http.HttpRequest;
+import com.liangyuelong.cacheserver.hash.HashServerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
@@ -66,6 +67,16 @@ public class HttpTest {
         }
 
 
+    }
+
+    @Test
+    public void testSuccess() {
+        String val = "Y2ZjZDIwODQ5NWQ1NjVlZjY2ZTdkZmY5Zjk4NzY0ZGE=";
+        System.out.println(HashServerUtils.isSuccess(val));
+        val = "Too busy. Service unavailable.";
+        System.out.println(HashServerUtils.isSuccess(val));
+        val = "Server too busy!";
+        System.out.println(HashServerUtils.isSuccess(val));
     }
 
 }

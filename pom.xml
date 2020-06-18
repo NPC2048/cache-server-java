@@ -20,10 +20,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
         <commongs-lang3.version>3.10</commongs-lang3.version>
         <http-request.version>6.0</http-request.version>
         <mencached.version>3.0.2</mencached.version>
+        <fastjson.version>1.2.71</fastjson.version>
     </properties>
 
     <dependencies>
@@ -49,6 +49,11 @@
                 <groupId>com.whalin</groupId>
                 <artifactId>Memcached-Java-Client</artifactId>
                 <version>${mencached.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
