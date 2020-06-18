@@ -1,7 +1,6 @@
 package com.liangyuelong.cacheserver.test;
 
 import com.github.kevinsawicki.http.HttpRequest;
-import com.liangyuelong.cacheserver.hash.HashServerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
@@ -9,16 +8,19 @@ import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class HttpTest {
 
-    int size = 200;
+    int size = 20;
     int[] seed;
-    int count = 100;
+    int count = 200;
 
     // 总共 10 波
     int total = 20;
+
+    private static Pattern pattern = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$");
 
     @Before
     public void init() {
@@ -28,15 +30,19 @@ public class HttpTest {
         }
     }
 
+    private volatile long maxTime;
+
     @Test
     public void test() throws InterruptedException {
         String host = "http://18.234.28.187:8080/calc";
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
         host = "http://47.107.78.83:6660/calc";
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
-        host = "http://ec2-35-165-155-39.us-west-2.compute.amazonaws.com/calc";
+//        host = "http://ec2-35-165-155-39.us-west-2.compute.amazonaws.com/calc";
+        host = "http://ec2-13-251-124-8.ap-southeast-1.compute.amazonaws.com:6671/calc";
         int index = 1;
         CountDownLatch countDownLatch = new CountDownLatch(count * total);
+        long beginTime = System.currentTimeMillis();
         while (total-- > 0) {
             String finalHost = host;
             System.out.println("==================== 第" + index + "波流量 ==================");
@@ -51,12 +57,15 @@ public class HttpTest {
                         true, "input", input);
                 String body = request.body();
                 time = System.currentTimeMillis() - time;
+                if (time > maxTime) {
+                    maxTime = time;
+                }
                 countDownLatch.countDown();
                 log.info("第" + (countDownLatch.getCount()) + "个请求");
                 log.info("input:" + input);
                 log.info("body:" + body);
                 log.info("time: " + time + " ms");
-                log.info("success:" + request.code());
+                log.info("success:" + pattern.matcher(body).matches());
             });
             System.out.println("==================== 第" + index + "波流量结束 ==================");
             System.out.println("==================== 第" + index + "波流量结束 ==================");
@@ -65,18 +74,9 @@ public class HttpTest {
             index++;
             TimeUnit.MICROSECONDS.sleep(100);
         }
-
-
-    }
-
-    @Test
-    public void testSuccess() {
-        String val = "Y2ZjZDIwODQ5NWQ1NjVlZjY2ZTdkZmY5Zjk4NzY0ZGE=";
-        System.out.println(HashServerUtils.isSuccess(val));
-        val = "Too busy. Service unavailable.";
-        System.out.println(HashServerUtils.isSuccess(val));
-        val = "Server too busy!";
-        System.out.println(HashServerUtils.isSuccess(val));
+        beginTime = System.currentTimeMillis() - beginTime;
+        System.out.println("最长用时:" + maxTime);
+        System.out.println("完成用时:" + beginTime);
     }
 
 }
