@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.MonoSink;
 
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
@@ -36,30 +36,27 @@ public class MainController {
      * @param body    request body
      * @return Mono<String>
      */
-//    @RequestMapping("/{path}")
-//    public Mono<String> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
-////        log.info("========== begin request :" + request.getId() + ", input: " + input);
-//        // 如果 input 为空，获取转发的值后返回
-//        if (StringUtils.isEmpty(input)) {
-//            return Mono.just(HashServerUtils.request(request, path, body));
-//        }
-//        Consumer<MonoSink<String>> consumer = sink -> MemClientUtils.getHash(request, path, body, sink, input);
-////        Flux.create(sink -> {
-////            sink.next("ab");
-////            sink.complete();
-////        }).limitRate();
-//        return Mono.create(consumer);
-//    }
     @RequestMapping("/{path}")
-    public Flux<String> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
+    public Mono<String> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
 //        log.info("========== begin request :" + request.getId() + ", input: " + input);
         // 如果 input 为空，获取转发的值后返回
         if (StringUtils.isEmpty(input)) {
-            return Flux.just(HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
-                            request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(body, StandardCharsets.UTF_8)));
+            return Mono.just(HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
+                    request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(body, StandardCharsets.UTF_8)));
         }
-        Consumer<FluxSink<String>> consumer = sink -> MemClientUtils.getHash(request, path, body, sink, input);
-        return Flux.create(consumer).limitRate(10000);
+        Consumer<MonoSink<String>> consumer = sink -> MemClientUtils.getHash(request, path, body, sink, input);
+        return Mono.create(consumer);
     }
+//    @RequestMapping("/{path}")
+//    public Flux<String> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
+////        log.info("========== begin request :" + request.getId() + ", input: " + input);
+//        // 如果 input 为空，获取转发的值后返回
+//        if (StringUtils.isEmpty(input)) {
+//            return Flux.just(HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
+//                            request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(body, StandardCharsets.UTF_8)));
+//        }
+//        Consumer<FluxSink<String>> consumer = sink -> MemClientUtils.getHash(request, path, body, sink, input);
+//        return Flux.create(consumer).limitRate(10000);
+//    }
 
 }

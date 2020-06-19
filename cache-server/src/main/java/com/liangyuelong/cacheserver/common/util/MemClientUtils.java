@@ -89,19 +89,27 @@ public class MemClientUtils {
             hashGetThreadPoolTaskExecutor.execute(() -> {
 //                log.info("新线程: " + Thread.currentThread());
                 String getHash;
-                do {
-                    getHash = HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
-                            request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(requestBody, StandardCharsets.UTF_8));
-                    log.info("hash:" + getHash);
-                    log.info("success:" + HashServerUtils.isSuccess(getHash));
-                } while (!HashServerUtils.isSuccess(getHash));
+                while (true){
+                    try {
+                        getHash = HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
+                                request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(requestBody, StandardCharsets.UTF_8));
+                        boolean isSuccess = HashServerUtils.isSuccess(getHash);
+                        log.info("hash:" + getHash);
+                        log.info("success:" + isSuccess);
+                        if (isSuccess) {
+                            break;
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+                }
                 // 存入 mem
                 client.set(key, getHash);
                 // 从 map 删除
                 map.remove(key);
                 // 返回
                 sink.success(getHash);
-                // 通知其他 quque
+                // 通知其他 queue
 //                log.info("返回:" + finalQueue.size());
                 for (MonoSink<String> monoSink : finalQueue) {
                     monoSink.success(getHash);

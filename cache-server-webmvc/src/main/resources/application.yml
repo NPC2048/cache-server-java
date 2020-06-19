@@ -6,7 +6,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
 memcached:
-  servers: 47.107.78.83:11212
+  servers: 47.107.78.83:11211
   failover: true
   initConn: 100
   minConn: 20
@@ -17,8 +17,8 @@ memcached:
   aliveCheck: true
 # 自定义配置
 cache-server:
-  #  hash-server-host: http://47.107.78.83:8051/calc
-  hash-server-host: http://localhost:8672/
+    hash-server-host: http://47.107.78.83:8051/
+#  hash-server-host: http://localhost:8672/
 hash:
   pool:
     # 核心线程数量 (可以同时往 server 请求 hash 的线程数量), 最多不会超过机器的性能
