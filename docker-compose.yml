@@ -1,20 +1,36 @@
 version: "2"
 services:
-  cache-server:
+  cache-server-webflux:
     image: java:8
-    container_name: java-cache-server1
+    container_name: java-cache-server-webflux
     restart: always
     working_dir: /root
     network_mode: bridge
     ports:
-      - 6671:8080
+      - 8081:8080
     volumes:
-      - ./cache-server-1.0.0.jar:/root/app.jar
+      - ./cache-server/target/cache-server-1.0.0.jar:/root/app.jar
       - ./log:/root/
     privileged: true
     environment:
-      - cache-server.hash-server-host=server地址
-      - memcached.servers=memcached地址
+      - cache-server.hash-server-host=http://liangyuelong.com:8051/
+      - memcached.servers=139.9.142.248:11211
       - hash.pool.core-size=20
-      - mem=320m
+    command: java -jar /root/app.jar -Xms320m -Xmx320m > /root/spring.log
+  cache-server-webmvc:
+    image: java:8
+    container_name: java-cache-server-webmvc
+    restart: always
+    working_dir: /root
+    network_mode: bridge
+    ports:
+      - 8080:8080
+    volumes:
+      - ./cache-server-webmvc/target/cache-server-webmvc-1.0.0.jar:/root/app.jar
+      - ./log:/root/
+    privileged: true
+    environment:
+      - cache-server.hash-server-host=http://liangyuelong.com:8051/
+      - memcached.servers=139.9.142.248:11211
+      - hash.pool.core-size=20
     command: java -jar /root/app.jar -Xms320m -Xmx320m > /root/spring.log

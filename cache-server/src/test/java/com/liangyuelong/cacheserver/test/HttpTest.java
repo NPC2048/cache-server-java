@@ -38,9 +38,8 @@ public class HttpTest {
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
         host = "http://47.107.78.83:6660/calc";
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
-//        host = "http://ec2-35-165-155-39.us-west-2.compute.amazonaws.com/calc";
-        host = "http://139.9.142.248:8080/calc";
-        host = "http://localhost:8080/calc";
+        host = "http://localhost:8081/speed";
+//        host = "http://139.9.142.248:8080/calc";
         int index = 1;
         CountDownLatch countDownLatch = new CountDownLatch(count * total);
         long beginTime = System.currentTimeMillis();
