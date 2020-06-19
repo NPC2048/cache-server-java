@@ -18,7 +18,7 @@ public class HttpTest {
     int count = 200;
 
     // 总共 10 波
-    int total = 20;
+    int total = 1;
 
     private static Pattern pattern = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$");
 
@@ -39,7 +39,7 @@ public class HttpTest {
         host = "http://47.107.78.83:6660/calc";
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
 //        host = "http://ec2-35-165-155-39.us-west-2.compute.amazonaws.com/calc";
-        host = "http://ec2-13-251-124-8.ap-southeast-1.compute.amazonaws.com:6671/calc";
+        host = "http://139.9.142.248:8080/calc";
         int index = 1;
         CountDownLatch countDownLatch = new CountDownLatch(count * total);
         long beginTime = System.currentTimeMillis();

@@ -57,6 +57,5 @@ public class MemcachedConfig {
     @Bean
     public MemCachedClient memCachedClient() {
         return new MemCachedClient();
-
     }
 }

@@ -9,6 +9,8 @@
     <version>1.0.0</version>
     <modules>
         <module>cache-server</module>
+        <module>cache-server-webmvc</module>
+        <module>cache-common</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -35,6 +37,13 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
+            <!-- 项目其他模块依赖 begin -->
+            <dependency>
+                <groupId>com.liangyuelong</groupId>
+                <artifactId>cache-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 项目其他模块依赖 end -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>

@@ -1,0 +1,31 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: cache-server
+  main:
+    allow-bean-definition-overriding: true
+memcached:
+  servers: 47.107.78.83:11212
+  failover: true
+  initConn: 100
+  minConn: 20
+  maxConn: 1000
+  maintSleep: 50
+  nagel: false
+  socketTO: 3000
+  aliveCheck: true
+# 自定义配置
+cache-server:
+  #  hash-server-host: http://47.107.78.83:8051/calc
+  hash-server-host: http://localhost:8672/
+hash:
+  pool:
+    # 核心线程数量 (可以同时往 server 请求 hash 的线程数量), 最多不会超过机器的性能
+    core-size: 20
+    # 空闲线程所允许的空闲时间
+    keep-alive-seconds: 60
+    # 最大线程数 - 由机器性能决定
+    max-pool-size: 1024
+    # 队列长度 - 超过队列长度的任务由调用的线程自己处理
+    queue-capacity: 1024

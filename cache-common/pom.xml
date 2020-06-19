@@ -9,45 +9,44 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cache-server</artifactId>
+    <artifactId>cache-common</artifactId>
 
     <dependencies>
-        <!-- 其他模块 -->
-        <dependency>
-            <groupId>com.liangyuelong</groupId>
-            <artifactId>cache-common</artifactId>
-        </dependency>
         <!-- spring boot begin -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
+            <artifactId>spring-boot</artifactId>
+            <optional>true</optional>
         </dependency>
         <!-- spring boot end -->
-        <!-- apache commons begin -->
+        <!-- spring begin -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- spring end -->
+        <!-- apache begin -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
-        <!-- apache commons end -->
+        <!-- apache end -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.github.kevinsawicki</groupId>
             <artifactId>http-request</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.whalin</groupId>
             <artifactId>Memcached-Java-Client</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

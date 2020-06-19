@@ -1,13 +1,15 @@
 package com.liangyuelong.cacheserver.common.util;
 
 
-import com.liangyuelong.cacheserver.hash.HashServerUtils;
+import com.liangyuelong.cacheserver.util.HashServerUtils;
 import com.whalin.MemCached.MemCachedClient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
+import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.MonoSink;
 
 import javax.annotation.Resource;
@@ -41,7 +43,7 @@ public class MemClientUtils {
      * 以 input 的 md5 作为 key
      * 相同的 input 都加入 key 响应的 queue 中
      */
-    private static Map<String, Queue<MonoSink<String>>> map = new ConcurrentHashMap<>(128);
+    private static Map<String, Queue<MonoSink<String>>> map = new ConcurrentHashMap<>(256);
 
     @Resource
     public void setClient(MemCachedClient client) {
@@ -88,7 +90,8 @@ public class MemClientUtils {
 //                log.info("新线程: " + Thread.currentThread());
                 String getHash;
                 do {
-                    getHash = HashServerUtils.request(request, path, requestBody);
+                    getHash = HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
+                            request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(requestBody, StandardCharsets.UTF_8));
                     log.info("hash:" + getHash);
                     log.info("success:" + HashServerUtils.isSuccess(getHash));
                 } while (!HashServerUtils.isSuccess(getHash));
@@ -110,6 +113,63 @@ public class MemClientUtils {
             queue.add(sink);
         }
 //        log.info("map 数量:" + map.size());
+    }
+
+    /**
+     * 以 input 的 md5 作为 key
+     * 相同的 input 都加入 key 响应的 queue 中
+     */
+    private static Map<String, Queue<FluxSink<String>>> FLUX_MAP = new ConcurrentHashMap<>(256);
+
+    public static void getHash(ServerHttpRequest request, String path, String requestBody, FluxSink<String> sink, String input) {
+        String key = DigestUtils.md5DigestAsHex(input.getBytes(StandardCharsets.UTF_8));
+        String hash = (String) client.get(key);
+        // 判断 hash 是否已存在, 如果已存在, 直接返回
+        if (hash != null) {
+            sink.next(hash);
+            sink.complete();
+            return;
+        }
+        // 判断是否已有正在处理中的队列
+        Queue<FluxSink<String>> queue = FLUX_MAP.get(key);
+        if (queue == null) {
+            queue = new ConcurrentLinkedQueue<>();
+            FLUX_MAP.put(key, queue);
+            final Queue<FluxSink<String>> finalQueue = queue;
+            // 启用线程去 server 获取 hash
+            hashGetThreadPoolTaskExecutor.execute(() -> {
+                String getHash;
+                while (true) {
+                    try {
+                        getHash = HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
+                                request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(requestBody, StandardCharsets.UTF_8));
+                        log.info("hash:" + getHash);
+                        log.info("success:" + HashServerUtils.isSuccess(getHash));
+                        if (HashServerUtils.isSuccess(getHash)) {
+                            break;
+                        }
+                    } catch (Exception e) {
+                        log.error(request.getId() + ":" + input + ":" + e.getMessage());
+                    }
+                }
+                // 存入 mem
+                client.set(key, getHash);
+                // 从 map 删除
+                FLUX_MAP.remove(key);
+                // 返回
+                sink.next(getHash);
+                sink.complete();
+                // 通知其他 quque
+//                log.info("返回:" + finalQueue.size());
+                for (FluxSink<String> fluxSink : finalQueue) {
+                    fluxSink.next(getHash);
+                    fluxSink.complete();
+                }
+            });
+        } else {
+            // 加入 queue
+            queue.add(sink);
+        }
     }
 
 }

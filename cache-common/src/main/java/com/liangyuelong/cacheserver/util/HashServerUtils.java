@@ -1,11 +1,10 @@
-package com.liangyuelong.cacheserver.hash;
+package com.liangyuelong.cacheserver.util;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.liangyuelong.cacheserver.config.CommConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -36,24 +35,20 @@ public class HashServerUtils {
     /**
      * 转发请求值 hash server
      *
-     * @param request     request
-     * @param requestBody request body
+     * @param path        转发 url 路径
+     * @param method      请求方法类型
+     * @param headers     请求头 map
+     * @param params      请求参数 map
+     * @param requestBody request body 字节数组
      * @return response body
      */
-    public static String request(ServerHttpRequest request, String path, String requestBody) {
-        // 请求方法
-        String method = request.getMethodValue();
-        // 请求 header
-        Map<String, String> headers = request.getHeaders().toSingleValueMap();
-        // 请求参数
-        Map<String, String> params = request.getQueryParams().toSingleValueMap();
-        // 请求 body
+    public static String request(String path, String method, Map<String, String> headers, Map<String, String> params, byte[] requestBody) {
         // 添加请求参数并 url 编码
         String url = HttpRequest.encode(HttpRequest.append(hashServerHost + path, params));
         // 组装 http 报文
         HttpRequest http = new HttpRequest(url, method).headers(headers);
         // 设置 request body
-        if (StringUtils.isNotEmpty(requestBody)) {
+        if (requestBody != null) {
             http = http.send(requestBody);
         }
         return http.body();
