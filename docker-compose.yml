@@ -7,7 +7,7 @@ services:
     working_dir: /root
     network_mode: bridge
     ports:
-      - 8081:8080
+      - 8081:8081
     volumes:
       - ./cache-server/target/cache-server-1.0.0.jar:/root/app.jar
       - ./log:/root/
