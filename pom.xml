@@ -22,7 +22,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <commongs-lang3.version>3.10</commongs-lang3.version>
+        <commongs-lang3.version>3.13.0</commongs-lang3.version>
         <http-request.version>6.0</http-request.version>
         <mencached.version>3.0.2</mencached.version>
         <fastjson.version>1.2.71</fastjson.version>
