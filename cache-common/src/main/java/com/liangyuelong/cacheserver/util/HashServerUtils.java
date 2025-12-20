@@ -20,7 +20,7 @@ public class HashServerUtils {
     /**
      * 编译正则
      */
-    private static Pattern pattern = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$");
+    private static final Pattern PATTERN = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$");
 
     /**
      * server 服务器地址
@@ -66,10 +66,10 @@ public class HashServerUtils {
         if (StringUtils.isEmpty(body)) {
             return false;
         }
-        if (pattern.matcher(body).matches()) {
+        if (PATTERN.matcher(body).matches()) {
             return true;
         }
-        return !body.equals("Too busy. Service unavailable.");
+        return !"Too busy. Service unavailable.".equals(body);
     }
 
 }

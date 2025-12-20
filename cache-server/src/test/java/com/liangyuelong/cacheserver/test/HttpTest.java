@@ -3,8 +3,8 @@ package com.liangyuelong.cacheserver.test;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -18,11 +18,11 @@ public class HttpTest {
     int count = 200;
 
     // 总共 10 波
-    int total = 20;
+    int total = 10;
 
-    private static Pattern pattern = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$");
+    private static final Pattern pattern = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$");
 
-    @Before
+    @BeforeEach
     public void init() {
         seed = new int[size];
         for (int i = 0; i < size; i++) {
@@ -36,9 +36,9 @@ public class HttpTest {
     public void test() throws InterruptedException {
         String host = "http://18.234.28.187:8080/calc";
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
-        host = "http://47.107.78.83:6660/calc";
+        host = "http://localhost:8081/calc";
 //        host = "http://cache-elb-897235646.ap-southeast-1.elb.amazonaws.com/calc";
-        host = "http://localhost:8081/speed";
+        host = "http://localhost:8081/calc";
 //        host = "http://139.9.142.248:8080/calc";
         int index = 1;
         CountDownLatch countDownLatch = new CountDownLatch(count * total);
@@ -53,19 +53,18 @@ public class HttpTest {
                 long time = System.currentTimeMillis();
                 Object input = seed[RandomUtils.nextInt(0, size)];
 //                input = RandomStringUtils.random(100);
-                HttpRequest request = HttpRequest.get(finalHost,
-                        true, "input", input);
+                HttpRequest request = HttpRequest.get(finalHost, true, "input", input);
                 String body = request.body();
                 time = System.currentTimeMillis() - time;
                 if (time > maxTime) {
                     maxTime = time;
                 }
                 countDownLatch.countDown();
-                log.info("第" + (countDownLatch.getCount()) + "个请求");
-                log.info("input:" + input);
-                log.info("body:" + body);
-                log.info("time: " + time + " ms");
-                log.info("success:" + pattern.matcher(body).matches());
+                log.info("第{}个请求", countDownLatch.getCount());
+                log.info("input:{}", input);
+                log.info("body:{}", body);
+                log.info("time: {} ms", time);
+                log.info("success:{}", pattern.matcher(body).matches());
             });
             System.out.println("==================== 第" + index + "波流量结束 ==================");
             System.out.println("==================== 第" + index + "波流量结束 ==================");

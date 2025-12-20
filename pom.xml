@@ -9,7 +9,6 @@
     <version>1.0.0</version>
     <modules>
         <module>cache-server</module>
-        <module>cache-server-webmvc</module>
         <module>cache-common</module>
     </modules>
     <packaging>pom</packaging>
@@ -17,14 +16,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <version>4.0.0</version>
+        <relativePath/>
     </parent>
 
     <properties>
-        <java.version>1.8</java.version>
-        <commongs-lang3.version>3.10</commongs-lang3.version>
+        <java.version>23</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <http-request.version>6.0</http-request.version>
-        <mencached.version>3.0.2</mencached.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
         <fastjson.version>1.2.71</fastjson.version>
     </properties>
 
@@ -33,6 +34,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -47,17 +52,12 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>${commongs-lang3.version}</version>
+                <version>${commons-lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.kevinsawicki</groupId>
                 <artifactId>http-request</artifactId>
                 <version>${http-request.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.whalin</groupId>
-                <artifactId>Memcached-Java-Client</artifactId>
-                <version>${mencached.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>

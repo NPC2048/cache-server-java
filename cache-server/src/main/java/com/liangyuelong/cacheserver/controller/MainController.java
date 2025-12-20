@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.MonoSink;
 
 import java.nio.charset.StandardCharsets;
-import java.util.function.Consumer;
 
 /**
  * 主要 controller
@@ -38,25 +36,13 @@ public class MainController {
      */
     @RequestMapping("/{path}")
     public Mono<String> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
-//        log.info("========== begin request :" + request.getId() + ", input: " + input);
+        log.info("========== begin request :{}, input: {}", request.getId(), input);
         // 如果 input 为空，获取转发的值后返回
         if (StringUtils.isEmpty(input)) {
-            return Mono.just(HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
+            return Mono.just(HashServerUtils.request(path, request.getMethod().name(), request.getHeaders().toSingleValueMap(),
                     request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(body, StandardCharsets.UTF_8)));
         }
-        Consumer<MonoSink<String>> consumer = sink -> MemClientUtils.getHash(request, path, body, sink, input);
-        return Mono.create(consumer);
+        return MemClientUtils.getHash(request, path, body, input);
     }
-//    @RequestMapping("/{path}")
-//    public Flux<String> calc(@PathVariable String path, ServerHttpRequest request, String input, @RequestBody(required = false) String body) {
-////        log.info("========== begin request :" + request.getId() + ", input: " + input);
-//        // 如果 input 为空，获取转发的值后返回
-//        if (StringUtils.isEmpty(input)) {
-//            return Flux.just(HashServerUtils.request(path, request.getMethodValue(), request.getHeaders().toSingleValueMap(),
-//                            request.getQueryParams().toSingleValueMap(), StringUtils.getBytes(body, StandardCharsets.UTF_8)));
-//        }
-//        Consumer<FluxSink<String>> consumer = sink -> MemClientUtils.getHash(request, path, body, sink, input);
-//        return Flux.create(consumer).limitRate(10000);
-//    }
 
 }
